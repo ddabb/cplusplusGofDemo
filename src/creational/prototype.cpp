@@ -1,4 +1,4 @@
-#include "prototype.h"
+#include "creational/prototype.h"
 #include <iostream>
 
 namespace design_patterns::creational {

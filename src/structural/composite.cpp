@@ -1,4 +1,4 @@
-#include "composite.h"
+#include "structural/composite.h"
 #include <iostream>
 
 namespace design_patterns::structural {

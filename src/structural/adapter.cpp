@@ -1,4 +1,4 @@
-#include "adapter.h"
+#include "structural/adapter.h"
 #include <iostream>
 
 namespace design_patterns::structural {

@@ -1,4 +1,4 @@
-#include "mediator.h"
+#include "behavioral/mediator.h"
 
 namespace design_patterns::behavioral {
 

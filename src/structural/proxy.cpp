@@ -1,4 +1,4 @@
-#include "proxy.h"
+#include "structural/proxy.h"
 #include <iostream>
 
 namespace design_patterns::structural {

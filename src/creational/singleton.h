@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 // 文件: src/creational/singleton.h
 // 说明: 单例模式示例，实现线程安全的局部静态实例（C++11 及以上安全）
 // 建议: 仅用于演示，生产环境应谨慎使用单例以避免全局状态副作用。
@@ -50,27 +50,7 @@ private:
     std::string message_;
 };
 
-void singleton_demo() {
-    std::cout << "\n========== Singleton Pattern Demo ==========" << std::endl;
-
-    Singleton& instance1 = Singleton::getInstance();
-    instance1.display();
-
-    Singleton& instance2 = Singleton::getInstance();
-    instance2.display();
-
-    std::cout << "\n[Singleton] Both instances point to the same address: " 
-              << (&instance1 == &instance2 ? "YES" : "NO") << std::endl;
-
-    instance1.setMessage("Modified message from instance1");
-    instance2.display();
-
-    std::cout << "=============================================\n" << std::endl;
-}
-
-}
-
-// 声明: demo 函数的实现已移到 src/creational/singleton.cpp
-namespace design_patterns::creational {
+// Demo function declaration
 void singleton_demo();
+
 }

@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include "src/creational/singleton.h"
-#include "src/creational/factory_method.h"
-#include "src/structural/adapter.h"
-#include "src/behavioral/observer.h"
+#include "../src/creational/singleton.h"
+#include "../src/creational/factory_method.h"
+#include "../src/structural/adapter.h"
+#include "../src/behavioral/observer.h"
 
 int main() {
 	std::cout << "Running smoke tests..." << std::endl;

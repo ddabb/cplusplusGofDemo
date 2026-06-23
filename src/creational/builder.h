@@ -104,7 +104,6 @@ public:
 }
 
 namespace design_patterns::creational {
-namespace design_patterns::creational {
 
 // 声明: builder_demo 的实现已移至 src/creational/builder.cpp
 void builder_demo();

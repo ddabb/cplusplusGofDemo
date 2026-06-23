@@ -1,4 +1,4 @@
-#include "command.h"
+#include "behavioral/command.h"
 
 namespace design_patterns::behavioral {
 

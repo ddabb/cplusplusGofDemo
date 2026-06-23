@@ -1,4 +1,4 @@
-#include "decorator.h"
+#include "structural/decorator.h"
 #include <iostream>
 
 namespace design_patterns::structural {

@@ -1,4 +1,4 @@
-#include "template_method.h"
+#include "behavioral/template_method.h"
 
 namespace design_patterns::behavioral {
 

@@ -3,3 +3,5 @@ build/DesignPatternDemo.dir/Debug/
 build/DesignPatternDemo.dir/Release/
 build/x64/Release/
 build/x64/Debug/
+build/DesignPatternDemoTests.dir/Release/
+.codebuddy

@@ -109,7 +109,6 @@ private:
 }
 
 namespace design_patterns::creational {
-namespace design_patterns::creational {
 
 // 声明: prototype_demo 已移至 src/creational/prototype.cpp
 void prototype_demo();

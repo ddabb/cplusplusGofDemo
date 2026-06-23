@@ -1,4 +1,4 @@
-#include "factory_method.h"
+#include "creational/factory_method.h"
 #include <iostream>
 
 namespace design_patterns::creational {

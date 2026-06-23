@@ -1,4 +1,4 @@
-#include "bridge.h"
+#include "structural/bridge.h"
 #include <iostream>
 
 namespace design_patterns::structural {

@@ -1,4 +1,4 @@
-#include "chain_of_responsibility.h"
+#include "behavioral/chain_of_responsibility.h"
 
 namespace design_patterns::behavioral {
 

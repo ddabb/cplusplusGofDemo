@@ -1,4 +1,4 @@
-#include "flyweight.h"
+#include "structural/flyweight.h"
 #include <iostream>
 
 namespace design_patterns::structural {

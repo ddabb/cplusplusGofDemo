@@ -1,4 +1,5 @@
-#include "strategy.h"
+#include "behavioral/strategy.h"
+// No-op change to ensure file is tracked by VCS
 
 namespace design_patterns::behavioral {
 

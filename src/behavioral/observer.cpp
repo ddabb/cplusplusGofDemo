@@ -1,4 +1,4 @@
-#include "observer.h"
+#include "behavioral/observer.h"
 
 namespace design_patterns::behavioral {
 

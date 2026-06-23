@@ -103,7 +103,6 @@ public:
 }
 
 namespace design_patterns::creational {
-namespace design_patterns::creational {
 
 // 声明: abstract_factory_demo 的实现已移至 src/creational/abstract_factory.cpp
 void abstract_factory_demo();
