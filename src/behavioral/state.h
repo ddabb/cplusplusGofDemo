@@ -98,6 +98,8 @@ void CompletedState::handle(Context& context) const {
     std::cout << "[CompletedState] Thank you for your purchase!" << std::endl;
 }
 
+// Leave demo declaration here; implementation moved to .cpp to reduce header bloat
+void state_demo();
 }
 
 namespace design_patterns::behavioral {

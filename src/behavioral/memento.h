@@ -15,6 +15,8 @@ public:
         return "Level: " + std::to_string(level_) + ", Score: " + std::to_string(score_) + ", Health: " + std::to_string(health_);
     }
 
+// Declare demo function here; implementation moved to .cpp
+void memento_demo();
 private:
     Memento(int level, int score, int health)
         : level_(level), score_(score), health_(health) {

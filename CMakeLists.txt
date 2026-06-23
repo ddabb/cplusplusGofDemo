@@ -53,18 +53,20 @@ add_executable(DesignPatternDemo
     src/structural/facade.cpp
     src/structural/flyweight.cpp
     src/structural/proxy.cpp
-
-    src/behavioral/observer.h
-    src/behavioral/template_method.h
-    src/behavioral/strategy.h
-    src/behavioral/chain_of_responsibility.h
-    src/behavioral/command.h
+    # Behavioral pattern implementations (moved to .cpp where applicable)
+    src/behavioral/observer.cpp
+    src/behavioral/template_method.cpp
+    src/behavioral/strategy.cpp
+    src/behavioral/chain_of_responsibility.cpp
+    src/behavioral/command.cpp
+    # iterator is a header-only template; keep as header
     src/behavioral/iterator.h
-    src/behavioral/state.h
-    src/behavioral/memento.h
-    src/behavioral/visitor.h
-    src/behavioral/mediator.h
-    src/behavioral/interpreter.h
+    src/behavioral/iterator_demo_impl.cpp
+    src/behavioral/state.cpp
+    src/behavioral/memento.cpp
+    src/behavioral/visitor.cpp
+    src/behavioral/mediator.cpp
+    src/behavioral/interpreter.cpp
 )
 
 if(MSVC)
