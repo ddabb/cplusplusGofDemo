@@ -45,13 +45,14 @@ add_executable(DesignPatternDemo
     src/creational/builder.cpp
     src/creational/prototype.cpp
 
-    src/structural/adapter.h
-    src/structural/bridge.h
-    src/structural/composite.h
-    src/structural/decorator.h
-    src/structural/facade.h
-    src/structural/flyweight.h
-    src/structural/proxy.h
+    # Structural pattern implementations (moved to .cpp)
+    src/structural/adapter.cpp
+    src/structural/bridge.cpp
+    src/structural/composite.cpp
+    src/structural/decorator.cpp
+    src/structural/facade.cpp
+    src/structural/flyweight.cpp
+    src/structural/proxy.cpp
 
     src/behavioral/observer.h
     src/behavioral/template_method.h
