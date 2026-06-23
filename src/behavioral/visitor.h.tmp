@@ -1,0 +1,492 @@
+﻿#pragma once
+
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace design_patterns::behavioral {
+
+class ConcreteElementA;
+class ConcreteElementB;
+class ConcreteElementC;
+
+/**
+ * @brief 抽象访问者类
+ * 
+ * 定义访问者的接口，声明对每种具体元素的访问方法。
+ */
+class Visitor {
+public:
+    /**
+     * @brief 虚析构函数
+     */
+    virtual ~Visitor() = default;
+
+    /**
+     * @brief 访问具体元素A
+     * 
+     * @param element 具体元素A对象
+     */
+    virtual void visitElementA(const ConcreteElementA* element) const = 0;
+
+    /**
+     * @brief 访问具体元素B
+     * 
+     * @param element 具体元素B对象
+     */
+    virtual void visitElementB(const ConcreteElementB* element) const = 0;
+
+    /**
+     * @brief 访问具体元素C
+     * 
+     * @param element 具体元素C对象
+     */
+    virtual void visitElementC(const ConcreteElementC* element) const = 0;
+
+    /**
+     * @brief 获取访问者名称
+     * 
+     * @return std::string 访问者名称
+     */
+    virtual std::string getName() const = 0;
+};
+
+/**
+ * @brief 抽象元素类
+ * 
+ * 定义元素的接口，声明接受访问者的方法。
+ */
+class Element {
+public:
+    /**
+     * @brief 虚析构函数
+     */
+    virtual ~Element() = default;
+
+    /**
+     * @brief 接受访问者
+     * 
+     * @param visitor 访问者对象
+     */
+    virtual void accept(const Visitor* visitor) const = 0;
+
+    /**
+     * @brief 获取元素名称
+     * 
+     * @return std::string 元素名称
+     */
+    virtual std::string getName() const = 0;
+};
+
+/**
+ * @brief 具体元素类A - 文本元素
+ */
+class ConcreteElementA : public Element {
+public:
+    /**
+     * @brief 构造函数
+     * 
+     * @param content 文本内容
+     */
+    explicit ConcreteElementA(const std::string& content)
+        : content_(content) {
+        std::cout << "[ConcreteElementA] Created: " << content_ << std::endl;
+    }
+
+    /**
+     * @brief 接受访问者
+     * 
+     * @param visitor 访问者对象
+     */
+    void accept(const Visitor* visitor) const override {
+        visitor->visitElementA(this);
+    }
+
+    /**
+     * @brief 获取元素名称
+     * 
+     * @return std::string 元素名称
+     */
+    std::string getName() const override {
+        return "TextElement";
+    }
+
+    /**
+     * @brief 获取文本内容
+     * 
+     * @return std::string 文本内容
+     */
+    std::string getContent() const {
+        return content_;
+    }
+
+    /**
+     * @brief 获取字符长度
+     * 
+     * @return size_t 字符长度
+     */
+    size_t getLength() const {
+        return content_.length();
+    }
+
+private:
+    std::string content_;  ///< 文本内容
+};
+
+/**
+ * @brief 具体元素类B - 图像元素
+ */
+class ConcreteElementB : public Element {
+public:
+    /**
+     * @brief 构造函数
+     * 
+     * @param url 图像URL
+     * @param width 宽度
+     * @param height 高度
+     */
+    ConcreteElementB(const std::string& url, int width, int height)
+        : url_(url), width_(width), height_(height) {
+        std::cout << "[ConcreteElementB] Created: " << url_ << " (" << width_ << "x" << height_ << ")" << std::endl;
+    }
+
+    /**
+     * @brief 接受访问者
+     * 
+     * @param visitor 访问者对象
+     */
+    void accept(const Visitor* visitor) const override {
+        visitor->visitElementB(this);
+    }
+
+    /**
+     * @brief 获取元素名称
+     * 
+     * @return std::string 元素名称
+     */
+    std::string getName() const override {
+        return "ImageElement";
+    }
+
+    /**
+     * @brief 获取图像URL
+     * 
+     * @return std::string 图像URL
+     */
+    std::string getUrl() const {
+        return url_;
+    }
+
+    /**
+     * @brief 获取宽度
+     * 
+     * @return int 宽度
+     */
+    int getWidth() const {
+        return width_;
+    }
+
+    /**
+     * @brief 获取高度
+     * 
+     * @return int 高度
+     */
+    int getHeight() const {
+        return height_;
+    }
+
+private:
+    std::string url_;   ///< 图像URL
+    int width_;         ///< 宽度
+    int height_;        ///< 高度
+};
+
+/**
+ * @brief 具体元素类C - 链接元素
+ */
+class ConcreteElementC : public Element {
+public:
+    /**
+     * @brief 构造函数
+     * 
+     * @param text 链接文本
+     * @param href 链接地址
+     */
+    ConcreteElementC(const std::string& text, const std::string& href)
+        : text_(text), href_(href) {
+        std::cout << "[ConcreteElementC] Created: " << text_ << " -> " << href_ << std::endl;
+    }
+
+    /**
+     * @brief 接受访问者
+     * 
+     * @param visitor 访问者对象
+     */
+    void accept(const Visitor* visitor) const override {
+        visitor->visitElementC(this);
+    }
+
+    /**
+     * @brief 获取元素名称
+     * 
+     * @return std::string 元素名称
+     */
+    std::string getName() const override {
+        return "LinkElement";
+    }
+
+    /**
+     * @brief 获取链接文本
+     * 
+     * @return std::string 链接文本
+     */
+    std::string getText() const {
+        return text_;
+    }
+
+    /**
+     * @brief 获取链接地址
+     * 
+     * @return std::string 链接地址
+     */
+    std::string getHref() const {
+        return href_;
+    }
+
+private:
+    std::string text_;  ///< 链接文本
+    std::string href_;  ///< 链接地址
+};
+
+/**
+ * @brief 具体访问者类 - 统计访问者
+ * 
+ * 统计文档中各类元素的数量和相关信息。
+ */
+class StatisticsVisitor : public Visitor {
+public:
+    /**
+     * @brief 构造函数
+     */
+    StatisticsVisitor() {
+        std::cout << "[StatisticsVisitor] Created" << std::endl;
+    }
+
+    /**
+     * @brief 访问文本元素
+     * 
+     * @param element 文本元素
+     */
+    void visitElementA(const ConcreteElementA* element) const override {
+        std::cout << "[StatisticsVisitor] Visiting TextElement: \"" << element->getContent() 
+                  << "\" (length: " << element->getLength() << ")" << std::endl;
+        textCount_++;
+        totalChars_ += element->getLength();
+    }
+
+    /**
+     * @brief 访问图像元素
+     * 
+     * @param element 图像元素
+     */
+    void visitElementB(const ConcreteElementB* element) const override {
+        std::cout << "[StatisticsVisitor] Visiting ImageElement: " << element->getUrl() 
+                  << " (" << element->getWidth() << "x" << element->getHeight() << ")" << std::endl;
+        imageCount_++;
+        totalArea_ += element->getWidth() * element->getHeight();
+    }
+
+    /**
+     * @brief 访问链接元素
+     * 
+     * @param element 链接元素
+     */
+    void visitElementC(const ConcreteElementC* element) const override {
+        std::cout << "[StatisticsVisitor] Visiting LinkElement: \"" << element->getText() 
+                  << "\" -> " << element->getHref() << std::endl;
+        linkCount_++;
+    }
+
+    /**
+     * @brief 获取访问者名称
+     * 
+     * @return std::string 访问者名称
+     */
+    std::string getName() const override {
+        return "StatisticsVisitor";
+    }
+
+    /**
+     * @brief 显示统计结果
+     */
+    void displayResults() const {
+        std::cout << "[StatisticsVisitor] Results:" << std::endl;
+        std::cout << "  Text elements: " << textCount_ << " (total chars: " << totalChars_ << ")" << std::endl;
+        std::cout << "  Image elements: " << imageCount_ << " (total area: " << totalArea_ << ")" << std::endl;
+        std::cout << "  Link elements: " << linkCount_ << std::endl;
+    }
+
+private:
+    mutable int textCount_ = 0;    ///< 文本元素计数
+    mutable int imageCount_ = 0;   ///< 图像元素计数
+    mutable int linkCount_ = 0;    ///< 链接元素计数
+    mutable size_t totalChars_ = 0; ///< 总字符数
+    mutable int totalArea_ = 0;    ///< 图像总面积
+};
+
+/**
+ * @brief 具体访问者类 - 格式化访问者
+ * 
+ * 将文档元素格式化为HTML字符串。
+ */
+class HtmlVisitor : public Visitor {
+public:
+    /**
+     * @brief 构造函数
+     */
+    HtmlVisitor() {
+        std::cout << "[HtmlVisitor] Created" << std::endl;
+    }
+
+    /**
+     * @brief 访问文本元素
+     * 
+     * @param element 文本元素
+     */
+    void visitElementA(const ConcreteElementA* element) const override {
+        std::cout << "[HtmlVisitor] Formatting TextElement to HTML" << std::endl;
+        htmlResult_ += "<p>" + element->getContent() + "</p>\n";
+    }
+
+    /**
+     * @brief 访问图像元素
+     * 
+     * @param element 图像元素
+     */
+    void visitElementB(const ConcreteElementB* element) const override {
+        std::cout << "[HtmlVisitor] Formatting ImageElement to HTML" << std::endl;
+        htmlResult_ += "<img src=\"" + element->getUrl() + "\" width=\"" 
+                       + std::to_string(element->getWidth()) + "\" height=\"" 
+                       + std::to_string(element->getHeight()) + "\" />\n";
+    }
+
+    /**
+     * @brief 访问链接元素
+     * 
+     * @param element 链接元素
+     */
+    void visitElementC(const ConcreteElementC* element) const override {
+        std::cout << "[HtmlVisitor] Formatting LinkElement to HTML" << std::endl;
+        htmlResult_ += "<a href=\"" + element->getHref() + "\">" + element->getText() + "</a>\n";
+    }
+
+    /**
+     * @brief 获取访问者名称
+     * 
+     * @return std::string 访问者名称
+     */
+    std::string getName() const override {
+        return "HtmlVisitor";
+    }
+
+    /**
+     * @brief 获取生成的HTML结果
+     * 
+     * @return std::string HTML结果
+     */
+    std::string getHtmlResult() const {
+        return htmlResult_;
+    }
+
+private:
+    mutable std::string htmlResult_;  ///< HTML结果字符串
+};
+
+/**
+ * @brief 对象结构类 - 文档
+ * 
+ * 维护元素集合，并提供遍历元素接受访问者的方法。
+ */
+class ObjectStructure {
+public:
+    /**
+     * @brief 构造函数
+     */
+    ObjectStructure() {
+        std::cout << "[ObjectStructure] Created" << std::endl;
+    }
+
+    /**
+     * @brief 添加元素
+     * 
+     * @param element 元素对象
+     */
+    void addElement(std::unique_ptr<Element> element) {
+        elements_.push_back(std::move(element));
+        std::cout << "[ObjectStructure] Element added: " << elements_.back()->getName() << std::endl;
+    }
+
+    /**
+     * @brief 接受访问者
+     * 
+     * 遍历所有元素，让它们接受访问者的访问。
+     * 
+     * @param visitor 访问者对象
+     */
+    void accept(const Visitor* visitor) const {
+        std::cout << "[ObjectStructure] Accepting visitor: " << visitor->getName() << std::endl;
+        for (const auto& element : elements_) {
+            element->accept(visitor);
+        }
+    }
+
+    /**
+     * @brief 获取元素数量
+     * 
+     * @return size_t 元素数量
+     */
+    size_t getElementCount() const {
+        return elements_.size();
+    }
+
+private:
+    std::vector<std::unique_ptr<Element>> elements_;  ///< 元素集合
+};
+
+/**
+ * @brief 访问者模式演示函数
+ * 
+ * 演示访问者模式的核心思想：在不改变元素类的前提下定义作用于这些元素的新操作。
+ */
+void visitor_demo() {
+    std::cout << "\n========== Visitor Pattern Demo ==========" << std::endl;
+    std::cout << "[Demo] 访问者模式核心：不改变元素类，定义新操作\n" << std::endl;
+
+    // 创建文档对象结构
+    std::cout << "[Demo] --- Creating Document ---" << std::endl;
+    ObjectStructure document;
+
+    // 添加元素
+    document.addElement(std::make_unique<ConcreteElementA>("Hello, Visitor Pattern!"));
+    document.addElement(std::make_unique<ConcreteElementB>("https://example.com/image.jpg", 800, 600));
+    document.addElement(std::make_unique<ConcreteElementA>("This is a demonstration of the Visitor pattern."));
+    document.addElement(std::make_unique<ConcreteElementC>("Learn More", "https://example.com"));
+    document.addElement(std::make_unique<ConcreteElementB>("https://example.com/logo.png", 200, 100));
+
+    // 使用统计访问者
+    std::cout << "\n[Demo] --- Using StatisticsVisitor ---" << std::endl;
+    StatisticsVisitor statsVisitor;
+    document.accept(&statsVisitor);
+    statsVisitor.displayResults();
+
+    // 使用HTML格式化访问者
+    std::cout << "\n[Demo] --- Using HtmlVisitor ---" << std::endl;
+    HtmlVisitor htmlVisitor;
+    document.accept(&htmlVisitor);
+    std::cout << "[HtmlVisitor] Generated HTML:\n" << htmlVisitor.getHtmlResult() << std::endl;
+
+    std::cout << "\n==========================================\n" << std::endl;
+}
+
+}

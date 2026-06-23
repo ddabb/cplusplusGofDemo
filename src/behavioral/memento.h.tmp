@@ -1,0 +1,283 @@
+﻿#pragma once
+
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace design_patterns::behavioral {
+
+/**
+ * @brief 备忘录类
+ * 
+ * 存储发起人的内部状态，备忘录可以根据需要存储任意数量的状态信息。
+ */
+class Memento {
+    friend class Originator;
+
+public:
+    /**
+     * @brief 获取状态描述
+     * 
+     * @return std::string 状态描述
+     */
+    std::string getStateDescription() const {
+        return "Level: " + std::to_string(level_) + ", Score: " + std::to_string(score_) + ", Health: " + std::to_string(health_);
+    }
+
+private:
+    /**
+     * @brief 私有构造函数
+     * 
+     * 只有Originator可以创建Memento。
+     * 
+     * @param level 当前关卡
+     * @param score 当前分数
+     * @param health 当前生命值
+     */
+    Memento(int level, int score, int health)
+        : level_(level), score_(score), health_(health) {
+        std::cout << "[Memento] Created - " << getStateDescription() << std::endl;
+    }
+
+    int level_;   ///< 游戏关卡
+    int score_;   ///< 游戏分数
+    int health_;  ///< 玩家生命值
+};
+
+/**
+ * @brief 发起人类 - 游戏角色
+ * 
+ * 创建一个备忘录记录当前状态，并可以从备忘录恢复状态。
+ */
+class Originator {
+public:
+    /**
+     * @brief 构造函数
+     * 
+     * @param level 初始关卡
+     * @param score 初始分数
+     * @param health 初始生命值
+     */
+    Originator(int level = 1, int score = 0, int health = 100)
+        : level_(level), score_(score), health_(health) {
+        std::cout << "[Originator] Created - " << getStateDescription() << std::endl;
+    }
+
+    /**
+     * @brief 设置关卡
+     * 
+     * @param level 新关卡
+     */
+    void setLevel(int level) {
+        level_ = level;
+        std::cout << "[Originator] Level changed to: " << level_ << std::endl;
+    }
+
+    /**
+     * @brief 设置分数
+     * 
+     * @param score 新分数
+     */
+    void setScore(int score) {
+        score_ = score;
+        std::cout << "[Originator] Score changed to: " << score_ << std::endl;
+    }
+
+    /**
+     * @brief 设置生命值
+     * 
+     * @param health 新生命值
+     */
+    void setHealth(int health) {
+        health_ = health;
+        std::cout << "[Originator] Health changed to: " << health_ << std::endl;
+    }
+
+    /**
+     * @brief 获取状态描述
+     * 
+     * @return std::string 状态描述
+     */
+    std::string getStateDescription() const {
+        return "Level: " + std::to_string(level_) + ", Score: " + std::to_string(score_) + ", Health: " + std::to_string(health_);
+    }
+
+    /**
+     * @brief 创建备忘录
+     * 
+     * 保存当前状态到备忘录对象中。
+     * 
+     * @return std::unique_ptr<Memento> 备忘录对象
+     */
+    std::unique_ptr<Memento> createMemento() {
+        std::cout << "[Originator] Creating memento..." << std::endl;
+        return std::unique_ptr<Memento>(new Memento(level_, score_, health_));
+    }
+
+    /**
+     * @brief 从备忘录恢复状态
+     * 
+     * 将发起人状态恢复到备忘录中保存的状态。
+     * 
+     * @param memento 备忘录对象
+     */
+    void restoreFromMemento(const std::unique_ptr<Memento>& memento) {
+        level_ = memento->level_;
+        score_ = memento->score_;
+        health_ = memento->health_;
+        std::cout << "[Originator] Restored from memento - " << getStateDescription() << std::endl;
+    }
+
+    /**
+     * @brief 玩游戏，改变状态
+     * 
+     * @param levelDelta 关卡变化
+     * @param scoreDelta 分数变化
+     * @param healthDelta 生命值变化
+     */
+    void playGame(int levelDelta, int scoreDelta, int healthDelta) {
+        level_ += levelDelta;
+        score_ += scoreDelta;
+        health_ += healthDelta;
+        if (health_ < 0) health_ = 0;
+        std::cout << "[Originator] After playing - " << getStateDescription() << std::endl;
+    }
+
+private:
+    int level_;   ///< 当前关卡
+    int score_;   ///< 当前分数
+    int health_;  ///< 当前生命值
+};
+
+/**
+ * @brief 管理者类
+ * 
+ * 负责保存备忘录，不关心备忘录的内容。
+ */
+class Caretaker {
+public:
+    /**
+     * @brief 构造函数
+     */
+    Caretaker() {
+        std::cout << "[Caretaker] Created" << std::endl;
+    }
+
+    /**
+     * @brief 保存备忘录
+     * 
+     * @param memento 备忘录对象
+     */
+    void saveMemento(std::unique_ptr<Memento> memento) {
+        mementos_.push_back(std::move(memento));
+        std::cout << "[Caretaker] Memento saved, total: " << mementos_.size() << std::endl;
+    }
+
+    /**
+     * @brief 获取指定索引的备忘录
+     * 
+     * @param index 备忘录索引
+     * @return std::unique_ptr<Memento> 备忘录对象
+     */
+    std::unique_ptr<Memento> getMemento(size_t index) {
+        if (index < mementos_.size()) {
+            std::cout << "[Caretaker] Retrieving memento at index: " << index << std::endl;
+            auto memento = std::move(mementos_[index]);
+            mementos_.erase(mementos_.begin() + index);
+            return memento;
+        }
+        std::cout << "[Caretaker] Memento not found at index: " << index << std::endl;
+        return nullptr;
+    }
+
+    /**
+     * @brief 获取最近保存的备忘录
+     * 
+     * @return std::unique_ptr<Memento> 最近的备忘录对象
+     */
+    std::unique_ptr<Memento> getLatestMemento() {
+        if (!mementos_.empty()) {
+            auto memento = std::move(mementos_.back());
+            mementos_.pop_back();
+            std::cout << "[Caretaker] Retrieving latest memento" << std::endl;
+            return memento;
+        }
+        std::cout << "[Caretaker] No mementos available" << std::endl;
+        return nullptr;
+    }
+
+    /**
+     * @brief 获取备忘录数量
+     * 
+     * @return size_t 备忘录数量
+     */
+    size_t getMementoCount() const {
+        return mementos_.size();
+    }
+
+private:
+    std::vector<std::unique_ptr<Memento>> mementos_;  ///< 备忘录列表
+};
+
+/**
+ * @brief 备忘录模式演示函数
+ * 
+ * 演示备忘录模式的核心思想：在不破坏封装性的前提下，捕获对象的内部状态，
+ * 并在对象之外保存这个状态，以便以后恢复。
+ */
+void memento_demo() {
+    std::cout << "\n========== Memento Pattern Demo ==========" << std::endl;
+    std::cout << "[Demo] 备忘录模式核心：捕获对象状态，保存并恢复\n" << std::endl;
+
+    // 创建游戏角色
+    std::cout << "[Demo] --- Creating Game Character ---" << std::endl;
+    Originator gameCharacter(1, 0, 100);
+
+    // 创建管理者
+    Caretaker caretaker;
+
+    // 玩游戏并保存进度
+    std::cout << "\n[Demo] --- Playing Game ---" << std::endl;
+    
+    // 第一次保存
+    std::cout << "\n[Demo] Save point 1" << std::endl;
+    caretaker.saveMemento(gameCharacter.createMemento());
+
+    // 玩游戏
+    gameCharacter.playGame(1, 100, -20);
+
+    // 第二次保存
+    std::cout << "\n[Demo] Save point 2" << std::endl;
+    caretaker.saveMemento(gameCharacter.createMemento());
+
+    // 继续玩游戏
+    gameCharacter.playGame(2, 200, -50);
+
+    // 第三次保存
+    std::cout << "\n[Demo] Save point 3" << std::endl;
+    caretaker.saveMemento(gameCharacter.createMemento());
+
+    // 继续玩游戏，角色死亡
+    std::cout << "\n[Demo] --- Character Dies ---" << std::endl;
+    gameCharacter.playGame(0, 0, -40);
+    std::cout << "[Demo] Game Over! Current state: " << gameCharacter.getStateDescription() << std::endl;
+
+    // 恢复到最近的存档点
+    std::cout << "\n[Demo] --- Restoring from latest save ---" << std::endl;
+    auto latestMemento = caretaker.getLatestMemento();
+    if (latestMemento) {
+        gameCharacter.restoreFromMemento(latestMemento);
+    }
+
+    // 恢复到更早的存档点
+    std::cout << "\n[Demo] --- Restoring to save point 1 ---" << std::endl;
+    auto memento1 = caretaker.getMemento(0);
+    if (memento1) {
+        gameCharacter.restoreFromMemento(memento1);
+    }
+
+    std::cout << "\n==========================================\n" << std::endl;
+}
+
+}

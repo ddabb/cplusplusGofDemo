@@ -1,0 +1,56 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(DesignPatternDemoConsole)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+include_directories(
+    ${PROJECT_SOURCE_DIR}
+)
+
+# 纯控制台版本，不需要SFML依赖
+add_executable(DesignPatternDemo
+    main_console.cpp
+    
+    src/creational/singleton.h
+    src/creational/factory_method.h
+    src/creational/abstract_factory.h
+    src/creational/builder.h
+    src/creational/prototype.h
+    
+    src/structural/adapter.h
+    src/structural/bridge.h
+    src/structural/composite.h
+    src/structural/decorator.h
+    src/structural/facade.h
+    src/structural/flyweight.h
+    src/structural/proxy.h
+    
+    src/behavioral/observer.h
+    src/behavioral/template_method.h
+    src/behavioral/strategy.h
+    src/behavioral/chain_of_responsibility.h
+    src/behavioral/command.h
+    src/behavioral/iterator.h
+    src/behavioral/state.h
+    src/behavioral/memento.h
+    src/behavioral/visitor.h
+    src/behavioral/mediator.h
+    src/behavioral/interpreter.h
+)
+
+if(MSVC)
+    target_compile_options(DesignPatternDemo PRIVATE /W4 /EHsc)
+else()
+    target_compile_options(DesignPatternDemo PRIVATE -Wall -Wextra -pedantic)
+endif()
+
+message(STATUS "============================================")
+message(STATUS " C++设计模式示例项目 - 控制台版本")
+message(STATUS "============================================")
+message(STATUS "C++ Standard: C++20")
+message(STATUS "SFML Dependency: None (Console Only)")
+message(STATUS "============================================")
