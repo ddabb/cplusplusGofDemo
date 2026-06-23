@@ -69,3 +69,8 @@ void singleton_demo() {
 }
 
 }
+
+// 声明: demo 函数的实现已移到 src/creational/singleton.cpp
+namespace design_patterns::creational {
+void singleton_demo();
+}

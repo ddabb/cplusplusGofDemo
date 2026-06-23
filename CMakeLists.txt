@@ -38,11 +38,12 @@ add_executable(DesignPatternDemo
     main_console.cpp
     # 注意: 目前各模式实现直接放在头文件中以便教学演示。
     # 如需优化编译时间，可将实现拆分到对应的 .cpp 文件，并仅在此处列出 .cpp。
-    src/creational/singleton.h
-    src/creational/factory_method.h
-    src/creational/abstract_factory.h
-    src/creational/builder.h
-    src/creational/prototype.h
+    # Creational pattern implementations (moved to .cpp)
+    src/creational/singleton.cpp
+    src/creational/factory_method.cpp
+    src/creational/abstract_factory.cpp
+    src/creational/builder.cpp
+    src/creational/prototype.cpp
 
     src/structural/adapter.h
     src/structural/bridge.h
