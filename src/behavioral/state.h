@@ -72,32 +72,6 @@ public:
     }
 };
 
-void PendingPaymentState::handle(Context& context) const {
-    std::cout << "[PendingPaymentState] Order is pending payment" << std::endl;
-    std::cout << "[PendingPaymentState] Processing payment..." << std::endl;
-    std::cout << "[PendingPaymentState] Payment successful!" << std::endl;
-    context.setState(std::make_unique<PaidState>());
-}
-
-void PaidState::handle(Context& context) const {
-    std::cout << "[PaidState] Order has been paid" << std::endl;
-    std::cout << "[PaidState] Preparing shipment..." << std::endl;
-    std::cout << "[PaidState] Shipment prepared!" << std::endl;
-    context.setState(std::make_unique<ShippedState>());
-}
-
-void ShippedState::handle(Context& context) const {
-    std::cout << "[ShippedState] Order has been shipped" << std::endl;
-    std::cout << "[ShippedState] Delivering to customer..." << std::endl;
-    std::cout << "[ShippedState] Order delivered!" << std::endl;
-    context.setState(std::make_unique<CompletedState>());
-}
-
-void CompletedState::handle(Context& context) const {
-    std::cout << "[CompletedState] Order has been completed" << std::endl;
-    std::cout << "[CompletedState] Thank you for your purchase!" << std::endl;
-}
-
 // Leave demo declaration here; implementation moved to .cpp to reduce header bloat
 void state_demo();
 }
