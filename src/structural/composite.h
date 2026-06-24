@@ -10,22 +10,53 @@
 
 namespace design_patterns::structural::composite {
 
+/**
+ * @brief 组件接口
+ *
+ * 定义组合中对象的通用接口，使叶子节点和组合节点可以统一处理。
+ */
 class Component {
 public:
     virtual ~Component() = default;
+    /**
+     * @brief 执行操作（显示）
+     * @param depth 层级深度（用于缩进显示）
+     */
     virtual void operation(int depth = 0) const = 0;
+    /**
+     * @brief 添加子组件
+     * @param child 子组件
+     */
     virtual void add(std::unique_ptr<Component> child) {}
+    /**
+     * @brief 移除子组件
+     * @param index 子组件索引
+     */
     virtual void remove(size_t index) {}
+    /**
+     * @brief 获取子组件
+     * @param index 子组件索引
+     * @return 子组件指针
+     */
     virtual Component* getChild(size_t index) const {
         return nullptr;
     }
+    /**
+     * @brief 获取名称
+     * @return 组件名称
+     */
     virtual std::string getName() const = 0;
 };
 
+/**
+ * @brief 叶子节点
+ *
+ * 组合中的最小单位，不能包含子节点。
+ */
 class Leaf : public Component {
 public:
     explicit Leaf(const std::string& name) : name_(name) {
-        std::cout << "[Leaf] Created: " << name_ << std::endl;
+        std::cout << "[叶子节点] 创建: " << name_ << std::endl;
     }
 
     void operation(int depth = 0) const override {
@@ -43,10 +74,15 @@ private:
     std::string name_;
 };
 
+/**
+ * @brief 组合节点
+ *
+ * 可以包含子组件的容器节点。
+ */
 class Composite : public Component {
 public:
     explicit Composite(const std::string& name) : name_(name) {
-        std::cout << "[Composite] Created: " << name_ << std::endl;
+        std::cout << "[组合节点] 创建: " << name_ << std::endl;
     }
 
     void operation(int depth = 0) const override {
@@ -61,13 +97,13 @@ public:
     }
 
     void add(std::unique_ptr<Component> child) override {
-        std::cout << "[Composite] Adding " << child->getName() << " to " << name_ << std::endl;
+        std::cout << "[组合节点] 将 " << child->getName() << " 添加到 " << name_ << std::endl;
         children_.push_back(std::move(child));
     }
 
     void remove(size_t index) override {
         if (index < children_.size()) {
-            std::cout << "[Composite] Removing " << children_[index]->getName() << " from " << name_ << std::endl;
+            std::cout << "[组合节点] 从 " << name_ << " 移除 " << children_[index]->getName() << std::endl;
             children_.erase(children_.begin() + index);
         }
     }
@@ -83,6 +119,10 @@ public:
         return name_;
     }
 
+    /**
+     * @brief 获取子组件数量
+     * @return 子组件数量
+     */
     size_t getChildCount() const {
         return children_.size();
     }

@@ -9,6 +9,9 @@
 
 namespace design_patterns::creational::abstract_factory {
 
+/**
+ * @brief 抽象产品 A
+ */
 class AbstractProductA {
 public:
     virtual ~AbstractProductA() = default;
@@ -16,6 +19,9 @@ public:
     virtual void operation() const = 0;
 };
 
+/**
+ * @brief 抽象产品 B
+ */
 class AbstractProductB {
 public:
     virtual ~AbstractProductB() = default;
@@ -23,50 +29,67 @@ public:
     virtual void operation() const = 0;
 };
 
+/**
+ * @brief 具体产品 A1
+ */
 class ProductA1 : public AbstractProductA {
 public:
     std::string getName() const override {
-        return "Product A1";
+        return "产品 A1";
     }
 
     void operation() const override {
-        std::cout << "[Product] " << getName() << " doing operation" << std::endl;
+        std::cout << "[产品] " << getName() << " 正在执行操作" << std::endl;
     }
 };
 
+/**
+ * @brief 具体产品 A2
+ */
 class ProductA2 : public AbstractProductA {
 public:
     std::string getName() const override {
-        return "Product A2";
+        return "产品 A2";
     }
 
     void operation() const override {
-        std::cout << "[Product] " << getName() << " doing operation" << std::endl;
+        std::cout << "[产品] " << getName() << " 正在执行操作" << std::endl;
     }
 };
 
+/**
+ * @brief 具体产品 B1
+ */
 class ProductB1 : public AbstractProductB {
 public:
     std::string getName() const override {
-        return "Product B1";
+        return "产品 B1";
     }
 
     void operation() const override {
-        std::cout << "[Product] " << getName() << " doing operation" << std::endl;
+        std::cout << "[产品] " << getName() << " 正在执行操作" << std::endl;
     }
 };
 
+/**
+ * @brief 具体产品 B2
+ */
 class ProductB2 : public AbstractProductB {
 public:
     std::string getName() const override {
-        return "Product B2";
+        return "产品 B2";
     }
 
     void operation() const override {
-        std::cout << "[Product] " << getName() << " doing operation" << std::endl;
+        std::cout << "[产品] " << getName() << " 正在执行操作" << std::endl;
     }
 };
 
+/**
+ * @brief 抽象工厂接口
+ *
+ * 定义创建一系列相关产品的接口。
+ */
 class AbstractFactory {
 public:
     virtual ~AbstractFactory() = default;
@@ -74,28 +97,38 @@ public:
     virtual std::unique_ptr<AbstractProductB> createProductB() const = 0;
 };
 
+/**
+ * @brief 具体工厂 1
+ *
+ * 创建产品族 1（ProductA1 + ProductB1）。
+ */
 class ConcreteFactory1 : public AbstractFactory {
 public:
     std::unique_ptr<AbstractProductA> createProductA() const override {
-        std::cout << "[Factory] Creating ProductA1" << std::endl;
+        std::cout << "[工厂] 创建 ProductA1" << std::endl;
         return std::make_unique<ProductA1>();
     }
 
     std::unique_ptr<AbstractProductB> createProductB() const override {
-        std::cout << "[Factory] Creating ProductB1" << std::endl;
+        std::cout << "[工厂] 创建 ProductB1" << std::endl;
         return std::make_unique<ProductB1>();
     }
 };
 
+/**
+ * @brief 具体工厂 2
+ *
+ * 创建产品族 2（ProductA2 + ProductB2）。
+ */
 class ConcreteFactory2 : public AbstractFactory {
 public:
     std::unique_ptr<AbstractProductA> createProductA() const override {
-        std::cout << "[Factory] Creating ProductA2" << std::endl;
+        std::cout << "[工厂] 创建 ProductA2" << std::endl;
         return std::make_unique<ProductA2>();
     }
 
     std::unique_ptr<AbstractProductB> createProductB() const override {
-        std::cout << "[Factory] Creating ProductB2" << std::endl;
+        std::cout << "[工厂] 创建 ProductB2" << std::endl;
         return std::make_unique<ProductB2>();
     }
 };

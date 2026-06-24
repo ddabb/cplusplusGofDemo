@@ -3,8 +3,13 @@
 
 namespace design_patterns::creational {
 
+/**
+ * @brief 抽象工厂模式演示函数
+ *
+ * 演示抽象工厂模式的核心特性：创建一系列相关或相互依赖的对象族。
+ */
 void abstract_factory_demo() {
-	std::cout << "\n========== Abstract Factory Pattern Demo ==========" << std::endl;
+	std::cout << "\n========== 抽象工厂模式演示 ==========" << std::endl;
 
 	std::unique_ptr<abstract_factory::AbstractFactory> factory1 = std::make_unique<abstract_factory::ConcreteFactory1>();
 	std::unique_ptr<abstract_factory::AbstractProductA> productA1 = factory1->createProductA();
@@ -20,7 +25,7 @@ void abstract_factory_demo() {
 	productA2->operation();
 	productB2->operation();
 
-	std::cout << "===================================================\n" << std::endl;
+	std::cout << "=============================================\n" << std::endl;
 }
 
 }

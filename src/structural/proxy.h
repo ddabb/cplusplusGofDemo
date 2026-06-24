@@ -10,29 +10,49 @@
 
 namespace design_patterns::structural::proxy {
 
+/**
+ * @brief 图像接口
+ *
+ * 定义图像对象的通用接口。
+ */
 class Image {
 public:
     virtual ~Image() = default;
+    /**
+     * @brief 显示图像
+     */
     virtual void display() const = 0;
+    /**
+     * @brief 获取图像名称
+     * @return 图像名称
+     */
     virtual std::string getName() const = 0;
 };
 
+/**
+ * @brief 真实图像
+ *
+ * 实际的图像实现类，负责加载和显示图像。
+ */
 class RealImage : public Image {
 public:
     explicit RealImage(const std::string& filename) : filename_(filename) {
         loadFromDisk();
     }
 
+    /**
+     * @brief 从磁盘加载图像
+     */
     void loadFromDisk() const {
-        std::cout << "[RealImage] Loading image: " << filename_ << std::endl;
+        std::cout << "[真实图像] 加载图像: " << filename_ << std::endl;
         for (int i = 0; i < 3; ++i) {
-            std::cout << "[RealImage] Loading..." << (i + 1) << "/3" << std::endl;
+            std::cout << "[真实图像] 加载中..." << (i + 1) << "/3" << std::endl;
         }
-        std::cout << "[RealImage] Image loaded successfully!" << std::endl;
+        std::cout << "[真实图像] 图像加载成功！" << std::endl;
     }
 
     void display() const override {
-        std::cout << "[RealImage] Displaying image: " << filename_ << std::endl;
+        std::cout << "[真实图像] 显示图像: " << filename_ << std::endl;
     }
 
     std::string getName() const override {
@@ -43,20 +63,25 @@ private:
     std::string filename_;
 };
 
+/**
+ * @brief 虚拟代理图像
+ *
+ * 延迟加载真实图像，只有在需要时才创建真实对象。
+ */
 class ProxyImage : public Image {
 public:
     explicit ProxyImage(const std::string& filename) 
         : filename_(filename), realImage_(nullptr) {
-        std::cout << "[ProxyImage] Created proxy for: " << filename_ << std::endl;
+        std::cout << "[虚拟代理] 创建代理: " << filename_ << std::endl;
     }
 
     void display() const override {
         std::lock_guard<std::mutex> lock(mutex_);
         if (!realImage_) {
-            std::cout << "[ProxyImage] Creating RealImage for: " << filename_ << std::endl;
+            std::cout << "[虚拟代理] 创建真实图像: " << filename_ << std::endl;
             realImage_ = std::make_unique<RealImage>(filename_);
         }
-        std::cout << "[ProxyImage] Delegating display to RealImage" << std::endl;
+        std::cout << "[虚拟代理] 委托显示给真实图像" << std::endl;
         realImage_->display();
     }
 
@@ -70,25 +95,35 @@ private:
     mutable std::unique_ptr<RealImage> realImage_;
 };
 
+/**
+ * @brief 受保护代理图像
+ *
+ * 提供访问控制，只有通过认证才能访问真实图像。
+ */
 class ProtectedImage : public Image {
 public:
     ProtectedImage(std::unique_ptr<Image> image, const std::string& password)
         : image_(std::move(image)), password_(password) {
-        std::cout << "[ProtectedImage] Created protected proxy for: " << image_->getName() << std::endl;
+        std::cout << "[受保护代理] 创建保护代理: " << image_->getName() << std::endl;
     }
 
     void display() const override {
-        std::cout << "[ProtectedImage] Checking access..." << std::endl;
+        std::cout << "[受保护代理] 检查访问权限..." << std::endl;
         if (authenticated_) {
-            std::cout << "[ProtectedImage] Access granted" << std::endl;
+            std::cout << "[受保护代理] 访问已授权" << std::endl;
             image_->display();
         } else {
-            std::cout << "[ProtectedImage] Access denied! Please authenticate first." << std::endl;
+            std::cout << "[受保护代理] 访问被拒绝！请先进行认证。" << std::endl;
         }
     }
 
+    /**
+     * @brief 进行认证
+     * @param password 密码
+     * @return 是否认证成功
+     */
     bool authenticate(const std::string& password) {
-        std::cout << "[ProtectedImage] Authenticating..." << std::endl;
+        std::cout << "[受保护代理] 进行认证..." << std::endl;
         authenticated_ = (password == password_);
         return authenticated_;
     }
@@ -103,17 +138,22 @@ private:
     mutable bool authenticated_ = false;
 };
 
+/**
+ * @brief 日志代理图像
+ *
+ * 在访问真实图像时记录日志。
+ */
 class LoggingImage : public Image {
 public:
     explicit LoggingImage(std::unique_ptr<Image> image)
         : image_(std::move(image)) {
-        std::cout << "[LoggingImage] Created logging proxy for: " << image_->getName() << std::endl;
+        std::cout << "[日志代理] 创建日志代理: " << image_->getName() << std::endl;
     }
 
     void display() const override {
-        std::cout << "[LoggingImage] [LOG] Before display: " << image_->getName() << std::endl;
+        std::cout << "[日志代理] [LOG] 显示前: " << image_->getName() << std::endl;
         image_->display();
-        std::cout << "[LoggingImage] [LOG] After display: " << image_->getName() << std::endl;
+        std::cout << "[日志代理] [LOG] 显示后: " << image_->getName() << std::endl;
     }
 
     std::string getName() const override {

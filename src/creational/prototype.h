@@ -11,6 +11,11 @@
 
 namespace design_patterns::creational::prototype {
 
+/**
+ * @brief 原型抽象类
+ *
+ * 定义克隆接口，所有具体原型必须实现此接口。
+ */
 class Prototype {
 public:
     virtual ~Prototype() = default;
@@ -18,25 +23,28 @@ public:
     virtual void show() const = 0;
 };
 
+/**
+ * @brief 形状原型
+ */
 class ShapePrototype : public Prototype {
 public:
     ShapePrototype(const std::string& name, const std::string& color)
         : name_(name), color_(color) {
-        std::cout << "[ShapePrototype] Constructor called: " << name_ << " (" << color_ << ")" << std::endl;
+        std::cout << "[形状原型] 构造函数被调用: " << name_ << " (" << color_ << ")" << std::endl;
     }
 
     ShapePrototype(const ShapePrototype& other)
         : name_(other.name_), color_(other.color_) {
-        std::cout << "[ShapePrototype] Copy constructor called: " << name_ << " (" << color_ << ")" << std::endl;
+        std::cout << "[形状原型] 拷贝构造函数被调用: " << name_ << " (" << color_ << ")" << std::endl;
     }
 
     Prototype* clone() const override {
-        std::cout << "[ShapePrototype] Cloning..." << std::endl;
+        std::cout << "[形状原型] 正在克隆..." << std::endl;
         return new ShapePrototype(*this);
     }
 
     void show() const override {
-        std::cout << "[ShapePrototype] Shape: " << name_ << ", Color: " << color_ << std::endl;
+        std::cout << "[形状原型] 形状: " << name_ << ", 颜色: " << color_ << std::endl;
     }
 
     void setColor(const std::string& color) {
@@ -52,26 +60,29 @@ private:
     std::string color_;
 };
 
+/**
+ * @brief 文档原型
+ */
 class DocumentPrototype : public Prototype {
 public:
     DocumentPrototype(const std::string& title)
         : title_(title) {
-        std::cout << "[DocumentPrototype] Constructor called: " << title_ << std::endl;
+        std::cout << "[文档原型] 构造函数被调用: " << title_ << std::endl;
     }
 
     DocumentPrototype(const DocumentPrototype& other)
         : title_(other.title_), contents_(other.contents_) {
-        std::cout << "[DocumentPrototype] Copy constructor called: " << title_ << std::endl;
+        std::cout << "[文档原型] 拷贝构造函数被调用: " << title_ << std::endl;
     }
 
     Prototype* clone() const override {
-        std::cout << "[DocumentPrototype] Cloning..." << std::endl;
+        std::cout << "[文档原型] 正在克隆..." << std::endl;
         return new DocumentPrototype(*this);
     }
 
     void show() const override {
-        std::cout << "[DocumentPrototype] Document: " << title_ << std::endl;
-        std::cout << "[DocumentPrototype] Contents:" << std::endl;
+        std::cout << "[文档原型] 文档: " << title_ << std::endl;
+        std::cout << "[文档原型] 内容:" << std::endl;
         for (size_t i = 0; i < contents_.size(); ++i) {
             std::cout << "  " << (i + 1) << ". " << contents_[i] << std::endl;
         }
@@ -86,19 +97,34 @@ private:
     std::vector<std::string> contents_;
 };
 
+/**
+ * @brief 原型管理器
+ *
+ * 管理原型对象的注册和创建。
+ */
 class PrototypeManager {
 public:
+    /**
+     * @brief 注册原型
+     * @param id 原型标识
+     * @param prototype 原型对象
+     */
     void registerPrototype(const std::string& id, Prototype* prototype) {
         prototypes_[id] = prototype;
-        std::cout << "[PrototypeManager] Registered prototype: " << id << std::endl;
+        std::cout << "[原型管理器] 注册原型: " << id << std::endl;
     }
 
+    /**
+     * @brief 创建原型实例
+     * @param id 原型标识
+     * @return 克隆的原型实例，未找到返回 nullptr
+     */
     Prototype* create(const std::string& id) {
         auto it = prototypes_.find(id);
         if (it != prototypes_.end()) {
             return it->second->clone();
         }
-        std::cout << "[PrototypeManager] Prototype not found: " << id << std::endl;
+        std::cout << "[原型管理器] 未找到原型: " << id << std::endl;
         return nullptr;
     }
 

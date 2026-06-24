@@ -3,8 +3,13 @@
 
 namespace design_patterns::creational {
 
+/**
+ * @brief 建造者模式演示函数
+ *
+ * 演示建造者模式的核心特性：分步骤构建复杂对象，分离构建过程与表示。
+ */
 void builder_demo() {
-	std::cout << "\n========== Builder Pattern Demo ==========" << std::endl;
+	std::cout << "\n========== 建造者模式演示 ==========" << std::endl;
 
 	builder::Director director;
 
