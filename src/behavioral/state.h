@@ -38,35 +38,24 @@ public:
  */
 class Context {
 public:
-    explicit Context(std::unique_ptr<State> state)
-        : state_(std::move(state)) {
-        std::cout << "[上下文] 创建，当前状态: " << state_->getName() << std::endl;
-    }
+    explicit Context(std::unique_ptr<State> state);
 
     /**
      * @brief 设置状态
      * @param state 新状态
      */
-    void setState(std::unique_ptr<State> state) {
-        std::cout << "[上下文] 状态从 " << state_->getName() 
-                  << " 变为 " << state->getName() << std::endl;
-        state_ = std::move(state);
-    }
+    void setState(std::unique_ptr<State> state);
 
     /**
      * @brief 请求处理
      */
-    void request() {
-        state_->handle(*this);
-    }
+    void request();
 
     /**
      * @brief 获取当前状态名称
      * @return 当前状态名称
      */
-    std::string getCurrentStateName() const {
-        return state_->getName();
-    }
+    std::string getCurrentStateName() const;
 
 private:
     std::unique_ptr<State> state_;

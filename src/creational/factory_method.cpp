@@ -1,6 +1,42 @@
 #include "creational/factory_method.h"
 #include <iostream>
 
+namespace design_patterns::creational::factory_method {
+
+std::string ConcreteProductA::getName() const {
+    return "产品 A";
+}
+
+void ConcreteProductA::use() const {
+    std::cout << "[产品] 正在使用 " << getName() << std::endl;
+}
+
+std::string ConcreteProductB::getName() const {
+    return "产品 B";
+}
+
+void ConcreteProductB::use() const {
+    std::cout << "[产品] 正在使用 " << getName() << std::endl;
+}
+
+void Creator::anOperation() const {
+    std::unique_ptr<Product> product = factoryMethod();
+    std::cout << "[创造者] 创建了: " << product->getName() << std::endl;
+    product->use();
+}
+
+std::unique_ptr<Product> ConcreteCreatorA::factoryMethod() const {
+    std::cout << "[创造者] 创建 ConcreteProductA" << std::endl;
+    return std::make_unique<ConcreteProductA>();
+}
+
+std::unique_ptr<Product> ConcreteCreatorB::factoryMethod() const {
+    std::cout << "[创造者] 创建 ConcreteProductB" << std::endl;
+    return std::make_unique<ConcreteProductB>();
+}
+
+}
+
 namespace design_patterns::creational {
 
 /**

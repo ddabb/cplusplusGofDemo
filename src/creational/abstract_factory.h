@@ -3,7 +3,6 @@
 // 说明: 抽象工厂模式示例实现（包含产品与工厂实现及 demo 函数）。
 // 建议: 演示代码可以保留在头文件，但若需生产级库应将实现移到 .cpp 文件以减少编译耦合。
 
-#include <iostream>
 #include <memory>
 #include <string>
 
@@ -34,13 +33,8 @@ public:
  */
 class ProductA1 : public AbstractProductA {
 public:
-    std::string getName() const override {
-        return "产品 A1";
-    }
-
-    void operation() const override {
-        std::cout << "[产品] " << getName() << " 正在执行操作" << std::endl;
-    }
+    std::string getName() const override;
+    void operation() const override;
 };
 
 /**
@@ -48,13 +42,8 @@ public:
  */
 class ProductA2 : public AbstractProductA {
 public:
-    std::string getName() const override {
-        return "产品 A2";
-    }
-
-    void operation() const override {
-        std::cout << "[产品] " << getName() << " 正在执行操作" << std::endl;
-    }
+    std::string getName() const override;
+    void operation() const override;
 };
 
 /**
@@ -62,13 +51,8 @@ public:
  */
 class ProductB1 : public AbstractProductB {
 public:
-    std::string getName() const override {
-        return "产品 B1";
-    }
-
-    void operation() const override {
-        std::cout << "[产品] " << getName() << " 正在执行操作" << std::endl;
-    }
+    std::string getName() const override;
+    void operation() const override;
 };
 
 /**
@@ -76,13 +60,8 @@ public:
  */
 class ProductB2 : public AbstractProductB {
 public:
-    std::string getName() const override {
-        return "产品 B2";
-    }
-
-    void operation() const override {
-        std::cout << "[产品] " << getName() << " 正在执行操作" << std::endl;
-    }
+    std::string getName() const override;
+    void operation() const override;
 };
 
 /**
@@ -104,15 +83,8 @@ public:
  */
 class ConcreteFactory1 : public AbstractFactory {
 public:
-    std::unique_ptr<AbstractProductA> createProductA() const override {
-        std::cout << "[工厂] 创建 ProductA1" << std::endl;
-        return std::make_unique<ProductA1>();
-    }
-
-    std::unique_ptr<AbstractProductB> createProductB() const override {
-        std::cout << "[工厂] 创建 ProductB1" << std::endl;
-        return std::make_unique<ProductB1>();
-    }
+    std::unique_ptr<AbstractProductA> createProductA() const override;
+    std::unique_ptr<AbstractProductB> createProductB() const override;
 };
 
 /**
@@ -122,15 +94,8 @@ public:
  */
 class ConcreteFactory2 : public AbstractFactory {
 public:
-    std::unique_ptr<AbstractProductA> createProductA() const override {
-        std::cout << "[工厂] 创建 ProductA2" << std::endl;
-        return std::make_unique<ProductA2>();
-    }
-
-    std::unique_ptr<AbstractProductB> createProductB() const override {
-        std::cout << "[工厂] 创建 ProductB2" << std::endl;
-        return std::make_unique<ProductB2>();
-    }
+    std::unique_ptr<AbstractProductA> createProductA() const override;
+    std::unique_ptr<AbstractProductB> createProductB() const override;
 };
 
 }

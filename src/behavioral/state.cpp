@@ -3,6 +3,25 @@
 
 namespace design_patterns::behavioral::state {
 
+Context::Context(std::unique_ptr<State> state)
+    : state_(std::move(state)) {
+    std::cout << "[上下文] 创建，当前状态: " << state_->getName() << std::endl;
+}
+
+void Context::setState(std::unique_ptr<State> state) {
+    std::cout << "[上下文] 状态从 " << state_->getName() 
+              << " 变为 " << state->getName() << std::endl;
+    state_ = std::move(state);
+}
+
+void Context::request() {
+    state_->handle(*this);
+}
+
+std::string Context::getCurrentStateName() const {
+    return state_->getName();
+}
+
 void PendingPaymentState::handle(Context& context) const {
     std::cout << "[待支付状态] 订单待支付" << std::endl;
     std::cout << "[待支付状态] 处理支付..." << std::endl;

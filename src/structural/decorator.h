@@ -3,7 +3,6 @@
 // 说明: 装饰器模式示例，展示如何动态组合功能（Coffee/Decorator）
 // 建议: 演示中使用 unique_ptr 来管理装饰链，风格适合教学用途。
 
-#include <iostream>
 #include <memory>
 #include <string>
 
@@ -34,13 +33,8 @@ public:
  */
 class Espresso : public Coffee {
 public:
-    std::string getDescription() const override {
-        return "浓缩咖啡";
-    }
-
-    double getCost() const override {
-        return 19.9;
-    }
+    std::string getDescription() const override;
+    double getCost() const override;
 };
 
 /**
@@ -48,13 +42,8 @@ public:
  */
 class Americano : public Coffee {
 public:
-    std::string getDescription() const override {
-        return "美式咖啡";
-    }
-
-    double getCost() const override {
-        return 24.9;
-    }
+    std::string getDescription() const override;
+    double getCost() const override;
 };
 
 /**
@@ -64,18 +53,9 @@ public:
  */
 class CoffeeDecorator : public Coffee {
 public:
-    explicit CoffeeDecorator(std::unique_ptr<Coffee> coffee)
-        : coffee_(std::move(coffee)) {
-        std::cout << "[咖啡装饰器] 创建" << std::endl;
-    }
-
-    std::string getDescription() const override {
-        return coffee_->getDescription();
-    }
-
-    double getCost() const override {
-        return coffee_->getCost();
-    }
+    explicit CoffeeDecorator(std::unique_ptr<Coffee> coffee);
+    std::string getDescription() const override;
+    double getCost() const override;
 
 protected:
     std::unique_ptr<Coffee> coffee_;
@@ -86,18 +66,9 @@ protected:
  */
 class MilkDecorator : public CoffeeDecorator {
 public:
-    explicit MilkDecorator(std::unique_ptr<Coffee> coffee)
-        : CoffeeDecorator(std::move(coffee)) {
-        std::cout << "[牛奶装饰器] 添加牛奶" << std::endl;
-    }
-
-    std::string getDescription() const override {
-        return coffee_->getDescription() + " + 牛奶";
-    }
-
-    double getCost() const override {
-        return coffee_->getCost() + 5.0;
-    }
+    explicit MilkDecorator(std::unique_ptr<Coffee> coffee);
+    std::string getDescription() const override;
+    double getCost() const override;
 };
 
 /**
@@ -105,18 +76,9 @@ public:
  */
 class SugarDecorator : public CoffeeDecorator {
 public:
-    explicit SugarDecorator(std::unique_ptr<Coffee> coffee)
-        : CoffeeDecorator(std::move(coffee)) {
-        std::cout << "[糖装饰器] 添加糖" << std::endl;
-    }
-
-    std::string getDescription() const override {
-        return coffee_->getDescription() + " + 糖";
-    }
-
-    double getCost() const override {
-        return coffee_->getCost() + 2.0;
-    }
+    explicit SugarDecorator(std::unique_ptr<Coffee> coffee);
+    std::string getDescription() const override;
+    double getCost() const override;
 };
 
 /**
@@ -124,18 +86,9 @@ public:
  */
 class ChocolateDecorator : public CoffeeDecorator {
 public:
-    explicit ChocolateDecorator(std::unique_ptr<Coffee> coffee)
-        : CoffeeDecorator(std::move(coffee)) {
-        std::cout << "[巧克力装饰器] 添加巧克力" << std::endl;
-    }
-
-    std::string getDescription() const override {
-        return coffee_->getDescription() + " + 巧克力";
-    }
-
-    double getCost() const override {
-        return coffee_->getCost() + 7.0;
-    }
+    explicit ChocolateDecorator(std::unique_ptr<Coffee> coffee);
+    std::string getDescription() const override;
+    double getCost() const override;
 };
 
 }

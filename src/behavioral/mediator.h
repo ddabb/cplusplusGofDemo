@@ -1,6 +1,8 @@
-﻿#pragma once
+#pragma once
+// 文件: src/behavioral/mediator.h
+// 说明: 中介者模式示例，展示对象间通信的集中协调
+// 建议: 演示中使用指针管理同事对象，生产环境需注意生命周期管理。
 
-#include <iostream>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -10,6 +12,11 @@ namespace design_patterns::behavioral::mediator {
 
 class Colleague;
 
+/**
+ * @brief 中介者接口
+ *
+ * 定义中介者的通用接口：注册同事、发送消息、广播消息。
+ */
 class Mediator {
 public:
     virtual ~Mediator() = default;
@@ -19,85 +26,55 @@ public:
     virtual std::string getName() const = 0;
 };
 
+/**
+ * @brief 同事类
+ *
+ * 通过中介者与其他同事通信。
+ */
 class Colleague {
 public:
-    Colleague(Mediator* mediator, const std::string& name)
-        : mediator_(mediator), name_(name) {
-        std::cout << "[Colleague] Created: " << name_ << std::endl;
-    }
-
+    Colleague(Mediator* mediator, const std::string& name);
     virtual ~Colleague() = default;
 
-    virtual void send(const std::string& to, const std::string& message) {
-        std::cout << "[Colleague] " << name_ << " sending to " << to << ": " << message << std::endl;
-        mediator_->sendMessage(name_, to, message);
-    }
-
-    virtual void receive(const std::string& from, const std::string& message) {
-        std::cout << "[Colleague] " << name_ << " received from " << from << ": " << message << std::endl;
-    }
-
-    virtual std::string getName() const {
-        return name_;
-    }
+    virtual void send(const std::string& to, const std::string& message);
+    virtual void receive(const std::string& from, const std::string& message);
+    virtual std::string getName() const;
 
 protected:
     Mediator* mediator_;
     std::string name_;
 };
 
+/**
+ * @brief 具体同事类
+ */
 class ConcreteColleague : public Colleague {
 public:
-    ConcreteColleague(Mediator* mediator, const std::string& name)
-        : Colleague(mediator, name) {}
+    ConcreteColleague(Mediator* mediator, const std::string& name);
 
-    void send(const std::string& to, const std::string& message) override {
-        std::cout << "[ConcreteColleague] " << name_ << " sending to " << to << ": " << message << std::endl;
-        mediator_->sendMessage(name_, to, message);
-    }
-
-    void receive(const std::string& from, const std::string& message) override {
-        std::cout << "[ConcreteColleague] " << name_ << " received from " << from << ": " << message << std::endl;
-    }
+    void send(const std::string& to, const std::string& message) override;
+    void receive(const std::string& from, const std::string& message) override;
 };
 
+/**
+ * @brief 具体中介者类
+ *
+ * 协调所有同事之间的通信。
+ */
 class ConcreteMediator : public Mediator {
 public:
-    ConcreteMediator(const std::string& name) : name_(name) {
-        std::cout << "[ConcreteMediator] Created: " << name_ << std::endl;
-    }
+    explicit ConcreteMediator(const std::string& name);
 
-    void registerColleague(const std::string& name, Colleague* colleague) override {
-        colleagues_[name] = colleague;
-        std::cout << "[ConcreteMediator] Registered colleague: " << name << std::endl;
-    }
+    void registerColleague(const std::string& name, Colleague* colleague) override;
+    void sendMessage(const std::string& from, const std::string& to, const std::string& message) override;
+    void broadcastMessage(const std::string& from, const std::string& message) override;
+    std::string getName() const override;
 
-    void sendMessage(const std::string& from, const std::string& to, const std::string& message) override {
-        std::cout << "[ConcreteMediator] Forwarding message from " << from << " to " << to << std::endl;
-        auto it = colleagues_.find(to);
-        if (it != colleagues_.end()) {
-            it->second->receive(from, message);
-        } else {
-            std::cout << "[ConcreteMediator] Colleague " << to << " not found" << std::endl;
-        }
-    }
-
-    void broadcastMessage(const std::string& from, const std::string& message) override {
-        std::cout << "[ConcreteMediator] Broadcasting message from " << from << std::endl;
-        for (const auto& pair : colleagues_) {
-            if (pair.first != from) {
-                pair.second->receive(from, message);
-            }
-        }
-    }
-
-    std::string getName() const override {
-        return name_;
-    }
-
-    size_t getColleagueCount() const {
-        return colleagues_.size();
-    }
+    /**
+     * @brief 获取同事数量
+     * @return 同事数量
+     */
+    size_t getColleagueCount() const;
 
 private:
     std::unordered_map<std::string, Colleague*> colleagues_;

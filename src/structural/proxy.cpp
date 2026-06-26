@@ -1,6 +1,89 @@
 #include "structural/proxy.h"
 #include <iostream>
 
+namespace design_patterns::structural::proxy {
+
+RealImage::RealImage(const std::string& filename) : filename_(filename) {
+    loadFromDisk();
+}
+
+void RealImage::loadFromDisk() const {
+    std::cout << "[真实图像] 加载图像: " << filename_ << std::endl;
+    for (int i = 0; i < 3; ++i) {
+        std::cout << "[真实图像] 加载中..." << (i + 1) << "/3" << std::endl;
+    }
+    std::cout << "[真实图像] 图像加载成功！" << std::endl;
+}
+
+void RealImage::display() const {
+    std::cout << "[真实图像] 显示图像: " << filename_ << std::endl;
+}
+
+std::string RealImage::getName() const {
+    return filename_;
+}
+
+ProxyImage::ProxyImage(const std::string& filename) 
+    : filename_(filename), realImage_(nullptr) {
+    std::cout << "[虚拟代理] 创建代理: " << filename_ << std::endl;
+}
+
+void ProxyImage::display() const {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (!realImage_) {
+        std::cout << "[虚拟代理] 创建真实图像: " << filename_ << std::endl;
+        realImage_ = std::make_unique<RealImage>(filename_);
+    }
+    std::cout << "[虚拟代理] 委托显示给真实图像" << std::endl;
+    realImage_->display();
+}
+
+std::string ProxyImage::getName() const {
+    return filename_;
+}
+
+ProtectedImage::ProtectedImage(std::unique_ptr<Image> image, const std::string& password)
+    : image_(std::move(image)), password_(password) {
+    std::cout << "[受保护代理] 创建保护代理: " << image_->getName() << std::endl;
+}
+
+void ProtectedImage::display() const {
+    std::cout << "[受保护代理] 检查访问权限..." << std::endl;
+    if (authenticated_) {
+        std::cout << "[受保护代理] 访问已授权" << std::endl;
+        image_->display();
+    } else {
+        std::cout << "[受保护代理] 访问被拒绝！请先进行认证。" << std::endl;
+    }
+}
+
+bool ProtectedImage::authenticate(const std::string& password) {
+    std::cout << "[受保护代理] 进行认证..." << std::endl;
+    authenticated_ = (password == password_);
+    return authenticated_;
+}
+
+std::string ProtectedImage::getName() const {
+    return image_->getName();
+}
+
+LoggingImage::LoggingImage(std::unique_ptr<Image> image)
+    : image_(std::move(image)) {
+    std::cout << "[日志代理] 创建日志代理: " << image_->getName() << std::endl;
+}
+
+void LoggingImage::display() const {
+    std::cout << "[日志代理] [LOG] 显示前: " << image_->getName() << std::endl;
+    image_->display();
+    std::cout << "[日志代理] [LOG] 显示后: " << image_->getName() << std::endl;
+}
+
+std::string LoggingImage::getName() const {
+    return image_->getName();
+}
+
+}
+
 namespace design_patterns::structural {
 
 /**

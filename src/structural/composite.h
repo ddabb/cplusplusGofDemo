@@ -3,7 +3,6 @@
 // 说明: 组合模式示例实现（Component/Leaf/Composite）
 // 建议: 用于演示递归树结构；如需复用建议将接口与实现拆分并增加单元测试。
 
-#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -55,20 +54,10 @@ public:
  */
 class Leaf : public Component {
 public:
-    explicit Leaf(const std::string& name) : name_(name) {
-        std::cout << "[叶子节点] 创建: " << name_ << std::endl;
-    }
+    explicit Leaf(const std::string& name);
 
-    void operation(int depth = 0) const override {
-        for (int i = 0; i < depth; ++i) {
-            std::cout << "  ";
-        }
-        std::cout << "- " << name_ << std::endl;
-    }
-
-    std::string getName() const override {
-        return name_;
-    }
+    void operation(int depth = 0) const override;
+    std::string getName() const override;
 
 private:
     std::string name_;
@@ -81,51 +70,19 @@ private:
  */
 class Composite : public Component {
 public:
-    explicit Composite(const std::string& name) : name_(name) {
-        std::cout << "[组合节点] 创建: " << name_ << std::endl;
-    }
+    explicit Composite(const std::string& name);
 
-    void operation(int depth = 0) const override {
-        for (int i = 0; i < depth; ++i) {
-            std::cout << "  ";
-        }
-        std::cout << "+ " << name_ << std::endl;
-
-        for (const auto& child : children_) {
-            child->operation(depth + 1);
-        }
-    }
-
-    void add(std::unique_ptr<Component> child) override {
-        std::cout << "[组合节点] 将 " << child->getName() << " 添加到 " << name_ << std::endl;
-        children_.push_back(std::move(child));
-    }
-
-    void remove(size_t index) override {
-        if (index < children_.size()) {
-            std::cout << "[组合节点] 从 " << name_ << " 移除 " << children_[index]->getName() << std::endl;
-            children_.erase(children_.begin() + index);
-        }
-    }
-
-    Component* getChild(size_t index) const override {
-        if (index < children_.size()) {
-            return children_[index].get();
-        }
-        return nullptr;
-    }
-
-    std::string getName() const override {
-        return name_;
-    }
+    void operation(int depth = 0) const override;
+    void add(std::unique_ptr<Component> child) override;
+    void remove(size_t index) override;
+    Component* getChild(size_t index) const override;
+    std::string getName() const override;
 
     /**
      * @brief 获取子组件数量
      * @return 子组件数量
      */
-    size_t getChildCount() const {
-        return children_.size();
-    }
+    size_t getChildCount() const;
 
 private:
     std::string name_;

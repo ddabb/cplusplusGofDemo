@@ -1,6 +1,48 @@
 #include "structural/bridge.h"
 #include <iostream>
 
+namespace design_patterns::structural::bridge {
+
+std::string ConcreteImplementorA::operationImpl(const std::string& data) const {
+    std::cout << "[具体实现A] 使用方法 A 处理数据" << std::endl;
+    return "[方法A结果] " + data;
+}
+
+std::string ConcreteImplementorB::operationImpl(const std::string& data) const {
+    std::cout << "[具体实现B] 使用方法 B 处理数据" << std::endl;
+    return "[方法B结果] " + data;
+}
+
+Abstraction::Abstraction(std::unique_ptr<Implementor> implementor)
+    : implementor_(std::move(implementor)) {
+    std::cout << "[抽象类] 构造函数被调用" << std::endl;
+}
+
+void Abstraction::operation(const std::string& data) const {
+    std::cout << "[抽象类] 调用实现对象..." << std::endl;
+    std::string result = implementor_->operationImpl(data);
+    std::cout << "[抽象类] 结果: " << result << std::endl;
+}
+
+RefinedAbstraction::RefinedAbstraction(std::unique_ptr<Implementor> implementor)
+    : Abstraction(std::move(implementor)) {
+    std::cout << "[扩展抽象类] 构造函数被调用" << std::endl;
+}
+
+void RefinedAbstraction::operation(const std::string& data) const {
+    std::cout << "[扩展抽象类] 预处理..." << std::endl;
+    Abstraction::operation(data);
+    std::cout << "[扩展抽象类] 后处理..." << std::endl;
+}
+
+void RefinedAbstraction::extraOperation(const std::string& data) const {
+    std::cout << "[扩展抽象类] 额外操作: " << data << std::endl;
+    std::string result = implementor_->operationImpl("额外: " + data);
+    std::cout << "[扩展抽象类] 额外结果: " << result << std::endl;
+}
+
+}
+
 namespace design_patterns::structural {
 
 /**

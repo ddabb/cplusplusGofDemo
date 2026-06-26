@@ -3,7 +3,6 @@
 // 说明: 工厂方法模式示例实现（包含 Creator/Product 及具体实现）
 // 建议: 当前为教学/demo 用法，若用于库请拆分头/源文件。
 
-#include <iostream>
 #include <memory>
 #include <string>
 
@@ -35,13 +34,8 @@ public:
  */
 class ConcreteProductA : public Product {
 public:
-    std::string getName() const override {
-        return "产品 A";
-    }
-
-    void use() const override {
-        std::cout << "[产品] 正在使用 " << getName() << std::endl;
-    }
+    std::string getName() const override;
+    void use() const override;
 };
 
 /**
@@ -49,13 +43,8 @@ public:
  */
 class ConcreteProductB : public Product {
 public:
-    std::string getName() const override {
-        return "产品 B";
-    }
-
-    void use() const override {
-        std::cout << "[产品] 正在使用 " << getName() << std::endl;
-    }
+    std::string getName() const override;
+    void use() const override;
 };
 
 /**
@@ -78,11 +67,7 @@ public:
      *
      * 使用工厂方法创建产品并执行操作。
      */
-    void anOperation() const {
-        std::unique_ptr<Product> product = factoryMethod();
-        std::cout << "[创造者] 创建了: " << product->getName() << std::endl;
-        product->use();
-    }
+    void anOperation() const;
 };
 
 /**
@@ -90,10 +75,7 @@ public:
  */
 class ConcreteCreatorA : public Creator {
 public:
-    std::unique_ptr<Product> factoryMethod() const override {
-        std::cout << "[创造者] 创建 ConcreteProductA" << std::endl;
-        return std::make_unique<ConcreteProductA>();
-    }
+    std::unique_ptr<Product> factoryMethod() const override;
 };
 
 /**
@@ -101,10 +83,7 @@ public:
  */
 class ConcreteCreatorB : public Creator {
 public:
-    std::unique_ptr<Product> factoryMethod() const override {
-        std::cout << "[创造者] 创建 ConcreteProductB" << std::endl;
-        return std::make_unique<ConcreteProductB>();
-    }
+    std::unique_ptr<Product> factoryMethod() const override;
 };
 
 }

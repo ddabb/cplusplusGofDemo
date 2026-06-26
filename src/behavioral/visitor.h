@@ -3,7 +3,6 @@
 // 说明: 访问者模式示例，展示如何将操作与数据结构分离
 // 建议: 演示中仅包含两个元素类型，生产项目可扩展更多元素。
 
-#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -67,28 +66,16 @@ public:
  */
 class ConcreteElementA : public Element {
 public:
-    ConcreteElementA(int value) : value_(value) {
-        std::cout << "[具体元素A] 创建，值: " << value_ << std::endl;
-    }
+    ConcreteElementA(int value);
 
-    void accept(Visitor& visitor) override {
-        visitor.visitConcreteElementA(this);
-    }
-
-    std::string getName() const override {
-        return "具体元素A";
-    }
-
-    int getValue() const override {
-        return value_;
-    }
+    void accept(Visitor& visitor) override;
+    std::string getName() const override;
+    int getValue() const override;
 
     /**
      * @brief 执行特定操作 A
      */
-    void specificOperationA() {
-        std::cout << "[具体元素A] 执行特定操作 A" << std::endl;
-    }
+    void specificOperationA();
 
 private:
     int value_;
@@ -99,28 +86,16 @@ private:
  */
 class ConcreteElementB : public Element {
 public:
-    ConcreteElementB(int value) : value_(value) {
-        std::cout << "[具体元素B] 创建，值: " << value_ << std::endl;
-    }
+    ConcreteElementB(int value);
 
-    void accept(Visitor& visitor) override {
-        visitor.visitConcreteElementB(this);
-    }
-
-    std::string getName() const override {
-        return "具体元素B";
-    }
-
-    int getValue() const override {
-        return value_;
-    }
+    void accept(Visitor& visitor) override;
+    std::string getName() const override;
+    int getValue() const override;
 
     /**
      * @brief 执行特定操作 B
      */
-    void specificOperationB() {
-        std::cout << "[具体元素B] 执行特定操作 B" << std::endl;
-    }
+    void specificOperationB();
 
 private:
     int value_;
@@ -131,21 +106,9 @@ private:
  */
 class ConcreteVisitor1 : public Visitor {
 public:
-    void visitConcreteElementA(Element* element) override {
-        std::cout << "[访问者1] 访问 " << element->getName() 
-                  << "，值为 " << element->getValue() << std::endl;
-        std::cout << "[访问者1] 计算结果: " << element->getValue() * 2 << std::endl;
-    }
-
-    void visitConcreteElementB(Element* element) override {
-        std::cout << "[访问者1] 访问 " << element->getName() 
-                  << "，值为 " << element->getValue() << std::endl;
-        std::cout << "[访问者1] 计算结果: " << element->getValue() + 10 << std::endl;
-    }
-
-    std::string getName() const override {
-        return "访问者1";
-    }
+    void visitConcreteElementA(Element* element) override;
+    void visitConcreteElementB(Element* element) override;
+    std::string getName() const override;
 };
 
 /**
@@ -153,21 +116,9 @@ public:
  */
 class ConcreteVisitor2 : public Visitor {
 public:
-    void visitConcreteElementA(Element* element) override {
-        std::cout << "[访问者2] 访问 " << element->getName() 
-                  << "，值为 " << element->getValue() << std::endl;
-        std::cout << "[访问者2] 计算结果: " << element->getValue() * element->getValue() << std::endl;
-    }
-
-    void visitConcreteElementB(Element* element) override {
-        std::cout << "[访问者2] 访问 " << element->getName() 
-                  << "，值为 " << element->getValue() << std::endl;
-        std::cout << "[访问者2] 计算结果: " << element->getValue() / 2 << std::endl;
-    }
-
-    std::string getName() const override {
-        return "访问者2";
-    }
+    void visitConcreteElementA(Element* element) override;
+    void visitConcreteElementB(Element* element) override;
+    std::string getName() const override;
 };
 
 /**
@@ -181,44 +132,25 @@ public:
      * @brief 添加元素
      * @param element 元素对象
      */
-    void addElement(std::unique_ptr<Element> element) {
-        elements_.push_back(std::move(element));
-        std::cout << "[对象结构] 添加元素: " << elements_.back()->getName() << std::endl;
-    }
+    void addElement(std::unique_ptr<Element> element);
 
     /**
      * @brief 移除元素
      * @param name 元素名称
      */
-    void removeElement(const std::string& name) {
-        auto it = std::remove_if(elements_.begin(), elements_.end(),
-            [&name](const std::unique_ptr<Element>& e) {
-                return e->getName() == name;
-            });
-        if (it != elements_.end()) {
-            std::cout << "[对象结构] 移除元素" << std::endl;
-            elements_.erase(it, elements_.end());
-        }
-    }
+    void removeElement(const std::string& name);
 
     /**
      * @brief 接受访问者
      * @param visitor 访问者对象
      */
-    void accept(Visitor& visitor) {
-        std::cout << "[对象结构] 接受访问者: " << visitor.getName() << std::endl;
-        for (const auto& element : elements_) {
-            element->accept(visitor);
-        }
-    }
+    void accept(Visitor& visitor);
 
     /**
      * @brief 获取元素数量
      * @return 元素数量
      */
-    size_t getElementCount() const {
-        return elements_.size();
-    }
+    size_t getElementCount() const;
 
 private:
     std::vector<std::unique_ptr<Element>> elements_;

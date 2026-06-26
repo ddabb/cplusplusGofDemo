@@ -1,6 +1,78 @@
 #include "structural/decorator.h"
 #include <iostream>
 
+namespace design_patterns::structural::decorator {
+
+std::string Espresso::getDescription() const {
+    return "浓缩咖啡";
+}
+
+double Espresso::getCost() const {
+    return 19.9;
+}
+
+std::string Americano::getDescription() const {
+    return "美式咖啡";
+}
+
+double Americano::getCost() const {
+    return 24.9;
+}
+
+CoffeeDecorator::CoffeeDecorator(std::unique_ptr<Coffee> coffee)
+    : coffee_(std::move(coffee)) {
+    std::cout << "[咖啡装饰器] 创建" << std::endl;
+}
+
+std::string CoffeeDecorator::getDescription() const {
+    return coffee_->getDescription();
+}
+
+double CoffeeDecorator::getCost() const {
+    return coffee_->getCost();
+}
+
+MilkDecorator::MilkDecorator(std::unique_ptr<Coffee> coffee)
+    : CoffeeDecorator(std::move(coffee)) {
+    std::cout << "[牛奶装饰器] 添加牛奶" << std::endl;
+}
+
+std::string MilkDecorator::getDescription() const {
+    return coffee_->getDescription() + " + 牛奶";
+}
+
+double MilkDecorator::getCost() const {
+    return coffee_->getCost() + 5.0;
+}
+
+SugarDecorator::SugarDecorator(std::unique_ptr<Coffee> coffee)
+    : CoffeeDecorator(std::move(coffee)) {
+    std::cout << "[糖装饰器] 添加糖" << std::endl;
+}
+
+std::string SugarDecorator::getDescription() const {
+    return coffee_->getDescription() + " + 糖";
+}
+
+double SugarDecorator::getCost() const {
+    return coffee_->getCost() + 2.0;
+}
+
+ChocolateDecorator::ChocolateDecorator(std::unique_ptr<Coffee> coffee)
+    : CoffeeDecorator(std::move(coffee)) {
+    std::cout << "[巧克力装饰器] 添加巧克力" << std::endl;
+}
+
+std::string ChocolateDecorator::getDescription() const {
+    return coffee_->getDescription() + " + 巧克力";
+}
+
+double ChocolateDecorator::getCost() const {
+    return coffee_->getCost() + 7.0;
+}
+
+}
+
 namespace design_patterns::structural {
 
 /**

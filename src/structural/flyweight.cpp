@@ -1,6 +1,60 @@
 #include "structural/flyweight.h"
 #include <iostream>
 
+namespace design_patterns::structural::flyweight {
+
+LetterCharacter::LetterCharacter(char symbol) : symbol_(symbol) {
+    std::cout << "[字母字符] 创建: '" << symbol_ << "'" << std::endl;
+}
+
+void LetterCharacter::display(const std::string& font, int size, int x, int y) const {
+    std::cout << "[字母字符] 在 (" << x << "," << y << ") 显示 '" << symbol_ 
+              << "'，字体 '" << font << "'，大小 " << size << std::endl;
+}
+
+char LetterCharacter::getSymbol() const {
+    return symbol_;
+}
+
+Character* CharacterFactory::getCharacter(char symbol) {
+    auto it = characters_.find(symbol);
+    if (it == characters_.end()) {
+        characters_[symbol] = std::make_unique<LetterCharacter>(symbol);
+    }
+    return characters_[symbol].get();
+}
+
+size_t CharacterFactory::getCharacterCount() const {
+    return characters_.size();
+}
+
+void CharacterFactory::displayAllCharacters() const {
+    std::cout << "[字符工厂] 创建了 " << characters_.size() << " 个唯一字符: ";
+    for (const auto& pair : characters_) {
+        std::cout << "'" << pair.first << "' ";
+    }
+    std::cout << std::endl;
+}
+
+TextEditor::TextEditor() : factory_(std::make_unique<CharacterFactory>()) {
+    std::cout << "[文本编辑器] 创建" << std::endl;
+}
+
+void TextEditor::addCharacter(char symbol, const std::string& font, int size, int x, int y) {
+    Character* character = factory_->getCharacter(symbol);
+    character->display(font, size, x, y);
+}
+
+size_t TextEditor::getUniqueCharacterCount() const {
+    return factory_->getCharacterCount();
+}
+
+void TextEditor::showStatistics() const {
+    factory_->displayAllCharacters();
+}
+
+}
+
 namespace design_patterns::structural {
 
 /**

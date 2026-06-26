@@ -1,6 +1,67 @@
 #include "structural/composite.h"
 #include <iostream>
 
+namespace design_patterns::structural::composite {
+
+Leaf::Leaf(const std::string& name) : name_(name) {
+    std::cout << "[叶子节点] 创建: " << name_ << std::endl;
+}
+
+void Leaf::operation(int depth) const {
+    for (int i = 0; i < depth; ++i) {
+        std::cout << "  ";
+    }
+    std::cout << "- " << name_ << std::endl;
+}
+
+std::string Leaf::getName() const {
+    return name_;
+}
+
+Composite::Composite(const std::string& name) : name_(name) {
+    std::cout << "[组合节点] 创建: " << name_ << std::endl;
+}
+
+void Composite::operation(int depth) const {
+    for (int i = 0; i < depth; ++i) {
+        std::cout << "  ";
+    }
+    std::cout << "+ " << name_ << std::endl;
+
+    for (const auto& child : children_) {
+        child->operation(depth + 1);
+    }
+}
+
+void Composite::add(std::unique_ptr<Component> child) {
+    std::cout << "[组合节点] 将 " << child->getName() << " 添加到 " << name_ << std::endl;
+    children_.push_back(std::move(child));
+}
+
+void Composite::remove(size_t index) {
+    if (index < children_.size()) {
+        std::cout << "[组合节点] 从 " << name_ << " 移除 " << children_[index]->getName() << std::endl;
+        children_.erase(children_.begin() + index);
+    }
+}
+
+Component* Composite::getChild(size_t index) const {
+    if (index < children_.size()) {
+        return children_[index].get();
+    }
+    return nullptr;
+}
+
+std::string Composite::getName() const {
+    return name_;
+}
+
+size_t Composite::getChildCount() const {
+    return children_.size();
+}
+
+}
+
 namespace design_patterns::structural {
 
 /**
